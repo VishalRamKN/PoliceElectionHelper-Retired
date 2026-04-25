@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Police Election Helper — Mission Complete · Vellore District</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:   #0D2137;
+      --blue:   #1565C0;
+      --gold:   #D4A017;
+      --gold-lt:#F5C842;
+      --white:  #FAFAF8;
+      --muted:  #8a9db5;
+      --card:   #132840;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Background texture ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(21,101,192,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(212,160,23,0.10) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Star field ── */
+    .stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--d, 4s) var(--delay, 0s) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle { from { opacity: 0.1; } to { opacity: 0.7; } }
+
+    /* ── Layout ── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 90px 0 60px;
+      animation: fadeUp 1s ease both;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(212,160,23,0.12);
+      border: 1px solid rgba(212,160,23,0.35);
+      border-radius: 100px;
+      padding: 8px 20px;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 36px;
+      animation: fadeUp 1s 0.1s ease both;
+    }
+    .badge svg { width: 14px; height: 14px; fill: var(--gold); }
+
+    .shield-wrap {
+      margin: 0 auto 32px;
+      width: 100px;
+      height: 100px;
+      animation: fadeUp 1s 0.15s ease both;
+    }
+    .shield-wrap svg { width: 100%; height: 100%; filter: drop-shadow(0 0 22px rgba(212,160,23,0.45)); }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 10px;
+      animation: fadeUp 1s 0.2s ease both;
+    }
+    h1 span { color: var(--gold); }
+
+    .subtitle {
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      color: var(--muted);
+      max-width: 520px;
+      margin: 18px auto 0;
+      line-height: 1.7;
+      animation: fadeUp 1s 0.3s ease both;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 52px 0 40px;
+      animation: fadeUp 1s 0.35s ease both;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,160,23,0.4), transparent);
+    }
+    .divider-icon { color: var(--gold); opacity: 0.7; font-size: 1rem; }
+
+    /* ── Mission card ── */
+    .mission {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 36px 40px;
+      margin-bottom: 32px;
+      animation: fadeUp 1s 0.4s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+    .mission::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--gold));
+    }
+    .mission h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .mission p {
+      color: #c8d8ea;
+      line-height: 1.75;
+      font-size: 1rem;
+    }
+
+    /* ── Stats row ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+      animation: fadeUp 1s 0.45s ease both;
+    }
+    .stat {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 22px 16px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--gold);
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── Features ── */
+    .features {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 36px 40px;
+      margin-bottom: 32px;
+      animation: fadeUp 1s 0.5s ease both;
+    }
+    .features h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+    .feature-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: #c8d8ea;
+      font-size: 0.97rem;
+      line-height: 1.55;
+    }
+    .feature-list li .dot {
+      width: 8px;
+      height: 8px;
+      min-width: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin-top: 6px;
+    }
+
+    /* ── Credits ── */
+    .credits {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 36px 40px;
+      margin-bottom: 32px;
+      animation: fadeUp 1s 0.55s ease both;
+    }
+    .credits h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+
+    .credit-group { margin-bottom: 26px; }
+    .credit-group:last-child { margin-bottom: 0; }
+
+    .credit-role {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .credit-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 8px;
+    }
+    .credit-card:last-child { margin-bottom: 0; }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: white;
+    }
+    .credit-name { font-size: 1rem; font-weight: 600; color: var(--white); }
+    .credit-title { font-size: 0.83rem; color: var(--muted); margin-top: 1px; }
+
+    .officer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .officer-chip {
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .officer-chip .o-rank {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2px;
+    }
+    .officer-chip .o-name {
+      font-size: 0.92rem;
+      color: var(--white);
+      font-weight: 600;
+    }
+    .officer-chip .o-station {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── Tech stack ── */
+    .tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .pill {
+      background: rgba(21,101,192,0.2);
+      border: 1px solid rgba(21,101,192,0.35);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      color: #9ec4f5;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Contact ── */
+    .contact {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      animation: fadeUp 1s 0.6s ease both;
+    }
+    .contact p {
+      color: var(--muted);
+      margin-bottom: 18px;
+      font-size: 0.97rem;
+    }
+    .contact a {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--blue), #1976d2);
+      color: white;
+      text-decoration: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .contact a:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    /* ── Footer ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 28px 24px 40px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.7;
+    }
+    footer strong { color: var(--gold); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 620px) {
+      .mission, .features, .credits, .contact { padding: 26px 22px; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .feature-list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 380px) {
+      .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Star field -->
+  <div class="stars" id="stars"></div>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="badge">
+        <svg viewBox="0 0 16 16"><path d="M8 0L9.8 5.5H16L11.1 8.9L12.9 14.4L8 11L3.1 14.4L4.9 8.9L0 5.5H6.2L8 0Z"/></svg>
+        Mission Complete · Retired with Honour
+      </div>
+
+      <div class="shield-wrap">
+        <svg viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 5L8 22V58C8 81 27 101 50 110C73 101 92 81 92 58V22L50 5Z" fill="#132840" stroke="#D4A017" stroke-width="2.5"/>
+          <path d="M50 15L16 29V58C16 77 31 95 50 103C69 95 84 77 84 58V29L50 15Z" fill="none" stroke="rgba(212,160,23,0.25)" stroke-width="1"/>
+          <!-- Star in shield -->
+          <path d="M50 35L53.5 45.5H65L55.5 51.5L59 62L50 56L41 62L44.5 51.5L35 45.5H46.5L50 35Z" fill="#D4A017"/>
+          <!-- Horizontal line -->
+          <line x1="28" y1="71" x2="72" y2="71" stroke="#D4A017" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="34" y1="77" x2="66" y2="77" stroke="rgba(212,160,23,0.5)" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <h1>Vellore District Police<br/><span>Election Helper</span></h1>
+      <p class="subtitle">
+        Built for the April 2026 Tamil Nadu Legislative Assembly Election to help field officers navigate to poll booths in real time — mission fulfilled, service concluded.
+      </p>
+      <a href="http://vellore-police.zephor.org" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;color:var(--muted);font-size:0.85rem;text-decoration:none;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:7px 16px;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='rgba(212,160,23,0.4)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,0.12)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        vellore-police.zephor.org
+      </a>
+    </section>
+
+    <!-- Mission Statement -->
+    <div class="divider"><span class="divider-icon">✦</span></div>
+
+    <div class="mission">
+      <h2>The Mission</h2>
+      <p>
+        During the April 2026 Tamil Nadu Legislative Assembly Election, police officers across Vellore District needed a fast, reliable way to locate poll booths, get live GPS-based turn-by-turn directions, check distances, travel times, and identify nearby landmarks — without any login or training required.
+      </p>
+      <p style="margin-top:12px;">
+        This tool was deployed at <strong style="color:var(--white)">vellore-police.zephor.org</strong> and served officers across multiple police station jurisdictions. It also provided an emergency SMS alert system to notify senior officers of EV machine issues or law-and-order incidents at any booth. The election cycle has concluded. The mission was a success.
+      </p>
+    </div>
+
+
+    <!-- Features -->
+    <div class="features">
+      <h2>What It Did</h2>
+      <ul class="feature-list">
+        <li><span class="dot"></span>Live GPS-based turn-by-turn directions to any poll booth</li>
+        <li><span class="dot"></span>Filter booths by police station jurisdiction</li>
+        <li><span class="dot"></span>Distance &amp; estimated travel time display</li>
+        <li><span class="dot"></span>Landmark information for every booth</li>
+        <li><span class="dot"></span>Emergency alert via SMS to senior officers</li>
+        <li><span class="dot"></span>Admin portal for booth data management</li>
+        <li><span class="dot"></span>Bulk Excel import for booth records</li>
+        <li><span class="dot"></span>Mobile-first, no-login public interface</li>
+      </ul>
+    </div>
+
+    <!-- Credits -->
+    <div class="credits">
+      <h2>With Gratitude</h2>
+
+      <div class="credit-group">
+        <div class="credit-role">Built By</div>
+        <div class="credit-card">
+          <div class="avatar">V</div>
+          <div>
+            <div class="credit-name">Vishal Ram K N</div>
+            <div class="credit-title">Developer &amp; System Architect</div>
+            <div style="margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;">
+              <a href="mailto:vishalramkn@gmail.com" style="color:var(--gold);text-decoration:none;font-size:0.82rem;">✉ vishalramkn@gmail.com</a>
+              <a href="https://www.linkedin.com/in/vishalram99" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;font-size:0.82rem;">&#x1F517; LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="credit-group">
+        <div class="credit-role">Supported By</div>
+        <div class="credit-card">
+          <div class="avatar" style="background:linear-gradient(135deg,#1a3a5c,#2e7bcf);font-size:0.75rem;font-family:'Source Sans 3',sans-serif;font-weight:600;">VIT</div>
+          <div>
+            <div class="credit-name">Dr. Jothish Kumar</div>
+            <div class="credit-title">IIC President · VIT Vellore</div>
+          </div>
+        </div>
+        <div class="credit-card" style="margin-top:8px;">
+          <div class="avatar" style="background:linear-gradient(135deg,#1a3a5c,#2e7bcf);font-size:0.75rem;font-family:'Source Sans 3',sans-serif;font-weight:600;">VIT</div>
+          <div>
+            <div class="credit-name">Dr. Ramesh Kumar C</div>
+            <div class="credit-title">Director Innovations · VIT's Office of Innovation, Startup &amp; Technology Transfer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="credit-group">
+        <div class="credit-role">In Partnership With</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div class="credit-card" style="flex:1;min-width:200px;">
+            <div class="avatar" style="background:linear-gradient(135deg,#0D2137,#1565C0);">
+              <svg width="22" height="22" viewBox="0 0 100 115" fill="none"><path d="M50 5L8 22V58C8 81 27 101 50 110C73 101 92 81 92 58V22L50 5Z" fill="none" stroke="#D4A017" stroke-width="5"/><path d="M50 35L53.5 45.5H65L55.5 51.5L59 62L50 56L41 62L44.5 51.5L35 45.5H46.5L50 35Z" fill="#D4A017"/></svg>
+            </div>
+            <div>
+              <div class="credit-name">Vellore District Police</div>
+              <div class="credit-title">Tamil Nadu Police · Election Duty</div>
+            </div>
+          </div>
+          <div class="credit-card" style="flex:1;min-width:200px;">
+            <div class="avatar" style="background:linear-gradient(135deg,#1a3a5c,#2e7bcf);font-size:0.75rem;font-family:'Source Sans 3',sans-serif;font-weight:600;">VIT</div>
+            <div>
+              <div class="credit-name">VIT Vellore</div>
+              <div class="credit-title">Vellore Institute of Technology</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact">
+      <p>Questions about this project or its source code?</p>
+      <a href="mailto:vishalramkn@gmail.com">Contact Vishal Ram K N</a>
+    </div>
+  </main>
+
+  <footer>
+    <strong>Police Election Helper</strong> — Vellore District Police, Tamil Nadu<br/>
+    Service period: April 2026 · Tamil Nadu Legislative Assembly Election · Now retired · Built with ♡ for public duty
+  </footer>
+
+  <script>
+    // Generate star field
+    const container = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 2 + 0.5;
+      s.style.cssText = `
+        width:${size}px; height:${size}px;
+        top:${Math.random()*100}%;
+        left:${Math.random()*100}%;
+        --d:${(Math.random()*4+2).toFixed(1)}s;
+        --delay:${(Math.random()*4).toFixed(1)}s;
+      `;
+      container.appendChild(s);
+    }
+  </script>
+</body>
+</html>
